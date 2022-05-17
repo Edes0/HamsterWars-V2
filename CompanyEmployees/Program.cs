@@ -13,6 +13,7 @@ builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
 
 builder.Services.AddControllers();
+builder.Services.ConfigureRepositoryManager();
 
 var app = builder.Build();
 
