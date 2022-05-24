@@ -64,6 +64,7 @@ namespace CompanyEmployees.Presentation.Controllers
             patchDoc.ApplyTo(result.employeeToPatch);
             _service.EmployeeService.SaveChangesForPatch(result.employeeToPatch, result.employeeEntity);
             return NoContent();
+
         }
     }
 }
