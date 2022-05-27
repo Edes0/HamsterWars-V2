@@ -1,5 +1,6 @@
 ﻿using Contracts.Contracts;
 using Entities.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
