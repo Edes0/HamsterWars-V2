@@ -3,7 +3,7 @@ using Microsoft.Net.Http.Headers;
 using Shared.DataTransferObjects;
 using System.Text;
 
-namespace CompanyEmployees
+namespace HamsterWarsV2API
 {
     public class CsvOutputFormatter : TextOutputFormatter
     {
@@ -15,8 +15,8 @@ namespace CompanyEmployees
         }
         protected override bool CanWriteType(Type? type)
         {
-            if (typeof(CompanyDto).IsAssignableFrom(type) ||
-           typeof(IEnumerable<CompanyDto>).IsAssignableFrom(type))
+            if (typeof(HamsterDto).IsAssignableFrom(type) ||
+           typeof(IEnumerable<HamsterDto>).IsAssignableFrom(type))
             {
                 return base.CanWriteType(type);
             }
@@ -27,22 +27,22 @@ namespace CompanyEmployees
         {
             var response = context.HttpContext.Response;
             var buffer = new StringBuilder();
-            if (context.Object is IEnumerable<CompanyDto>)
+            if (context.Object is IEnumerable<HamsterDto>)
             {
-                foreach (var company in (IEnumerable<CompanyDto>)context.Object)
+                foreach (var hamster in (IEnumerable<HamsterDto>)context.Object)
                 {
-                    FormatCsv(buffer, company);
+                    FormatCsv(buffer, hamster);
                 }
             }
             else
             {
-                FormatCsv(buffer, (CompanyDto)context.Object);
+                FormatCsv(buffer, (HamsterDto)context.Object);
             }
             await response.WriteAsync(buffer.ToString());
         }
-        private static void FormatCsv(StringBuilder buffer, CompanyDto company)
+        private static void FormatCsv(StringBuilder buffer, HamsterDto hamster)
         {
-            buffer.AppendLine($"{company.Id},\"{company.Name},\"{company.FullAddress}\"");
+            buffer.AppendLine($"{hamster.Id},\"{hamster.Name},\"{hamster.Age}\"\"{hamster.FavouriteFood}\"\"{hamster.FavouriteActivity}\"\"{hamster.ImageName}\"\"{hamster.Wins}\"\"{hamster.Defeats}\"\"{hamster.Games}\"\"{hamster.Likes}\"");
         }
     }
 }

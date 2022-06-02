@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace CompanyEmployees.Presentation
+namespace HamsterWarsV2API.Presentation
 {
     public class ArrayModelBinder : IModelBinder
     {

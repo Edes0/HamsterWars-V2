@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
 using Contracts;
 using Service.Contracts;
-using Service.Service;
 
 namespace Service
 {
     public sealed class ServiceManager : IServiceManager
     {
-        private readonly Lazy<ICompanyService> _companyService;
-        private readonly Lazy<IEmployeeService> _employeeService;
+        private readonly Lazy<IBattleService> _battleService;
+        private readonly Lazy<IHamsterService> _hamsterService;
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
         logger, IMapper mapper)
         {
-            _companyService = new Lazy<ICompanyService>(() =>
-            new CompanyService(repositoryManager, logger, mapper));
-            _employeeService = new Lazy<IEmployeeService>(() =>
-            new EmployeeService(repositoryManager, logger, mapper));
+            _battleService = new Lazy<IBattleService>(() =>
+            new BattleService(repositoryManager, logger, mapper));
+            _hamsterService = new Lazy<IHamsterService>(() =>
+            new HamsterService(repositoryManager, logger, mapper));
         }
-        public ICompanyService CompanyService => _companyService.Value;
-        public IEmployeeService EmployeeService => _employeeService.Value;
+        public IBattleService BattleService => _battleService.Value;
+        public IHamsterService HamsterService => _hamsterService.Value;
     }
 }

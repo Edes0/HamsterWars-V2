@@ -1,29 +1,31 @@
 ﻿using AutoMapper;
-using Entities.Domain.Models;
+using Entities.Models;
 using Shared.DataTransferObjects;
 
-namespace CompanyEmployees
+namespace HamsterWarsV2API
 {
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            CreateMap<Company, CompanyDto>()
-            .ForMember(c => c.FullAddress, opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
+            //CreateMap<Hamster, HamsterDto>()
+            //.ForMember(c => c.FullAddress, opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
 
-            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Battle, BattleDto>();
 
-            CreateMap<CompanyForCreationDto, Company>();
+            CreateMap<BattleForCreationDto, Battle>();
 
-            CreateMap<EmployeeForCreationDto, Employee>();
+            CreateMap<BattleForUpdateDto, Battle>();
 
-            CreateMap<EmployeeForUpdateDto, Employee>();
+            CreateMap<BattleForUpdateDto, Battle>().ReverseMap();
 
-            CreateMap<EmployeeForUpdateDto, Employee>().ReverseMap();
+            CreateMap<Hamster, HamsterDto>();
 
-            CreateMap<CompanyForUpdateDto, Company>();
+            CreateMap<HamsterForCreationDto, Hamster>();
+
+            CreateMap<HamsterForUpdateDto, Hamster>();
+
+            CreateMap<HamsterForUpdateDto, Hamster>().ReverseMap();
         }
-
     }
-
 }

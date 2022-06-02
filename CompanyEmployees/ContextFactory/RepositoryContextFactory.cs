@@ -14,7 +14,7 @@ namespace CompanyEmployees.ContextFactory
             .Build();
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
             .UseSqlServer(configuration.GetConnectionString("sqlConnection"),
-                    b => b.MigrationsAssembly("CompanyEmployees"));
+                    b => b.MigrationsAssembly("HamsterWarsV2API"));
 
             return new RepositoryContext(builder.Options);
         }

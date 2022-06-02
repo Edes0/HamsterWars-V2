@@ -1,17 +1,16 @@
 using NLog;
-using CompanyEmployees.Extensions;
+using HamsterWarsV2API.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using CompanyEmployees.Presentation.ActionFilters;
+using HamsterWarsV2API.Presentation.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
 "/nlog.config"));
-
 
 // Replacing the System.Text.Json workaround
 NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
@@ -38,7 +37,7 @@ builder.Services.AddControllers(config =>
     config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
 }).AddXmlDataContractSerializerFormatters()
  .AddCustomCSVFormatter()
-.AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+.AddApplicationPart(typeof(HamsterWarsV2API.Presentation.AssemblyReference).Assembly);
 
 
 builder.Services.ConfigureRepositoryManager();

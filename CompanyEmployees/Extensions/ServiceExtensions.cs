@@ -5,7 +5,7 @@ using Repository;
 using Service;
 using Service.Contracts;
 
-namespace CompanyEmployees.Extensions
+namespace HamsterWarsV2API.Extensions
 {
     public static class ServiceExtensions
     {

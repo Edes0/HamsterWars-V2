@@ -1,4 +1,4 @@
-﻿using Entities.Domain.Models;
+﻿using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Configuration;
 
@@ -13,11 +13,10 @@ namespace Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+            modelBuilder.ApplyConfiguration(new HamsterConfiguration());
         }
 
-        public DbSet<Company>? Companies { get; set; }
-        public DbSet<Employee>? Employees { get; set; }
+        public DbSet<Hamster>? Hamsters { get; set; }
+        public DbSet<Battle>? Battles { get; set; }
     }
 }
