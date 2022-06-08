@@ -1,8 +1,8 @@
 ﻿namespace HamsterWars.Services
 {
-    public static class PercentageCalculator
+    public static class Calculator
     {
-        public static int Calculate(int wins, int games)
+        public static int CalculatePercentage(int wins, int games)
         {
             if (games == 0) return 0;
 

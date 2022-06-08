@@ -21,18 +21,7 @@
         hamsters = await RequestService.GetHamsters();
         battles = await RequestService.GetBattles();
 
-        (winnerHamster, loserHamster) = PercentageBarServices.GetResultHamsters(hamsters, battles);
-        (int winnerWinrate, int loserWinrate) = PercentageBarServices.CalculateWinRate(winnerHamster, loserHamster);
-
-        if (winnerWinrate > loserWinrate)
-        {
-            percentage = OddsCalculator.Calculate(winnerWinrate, loserWinrate);
-        }
-        else
-        {
-            percentage = OddsCalculator.Calculate(loserWinrate, winnerWinrate);
-            percentage = 100 - percentage;
-        }
+        PercentageBarServices.CalculatePercentage(hamsters, battles);
     }
     /// <summary>
     /// Component that shows how likley the hamster that won was. Calculates with PercentageCalculator.Calculate.

@@ -21,6 +21,7 @@ namespace HamsterWarsV2.Blazor.Services
                 return new Hamster { Name = "REMOVED", ImageName = "hamster-43.jpg", Games = 1, Wins = 0 };
             }
         }
+
         public static Hamster ReturnLastBattleLoser(List<Hamster> hamsters, List<Battle> battles)
         {
             if (hamsters.Any(h => h.Id == battles.Last().Loser_ID))

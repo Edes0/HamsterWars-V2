@@ -14,12 +14,12 @@
 else
 {
     <div class="row">
-    @foreach (Hamster hamster in hamsters)
-    {
-        <div class="column">
-        <Card hamster="hamster"/>
-        </div>
-    }
+        @foreach (Hamster hamster in hamsters)
+        {
+            <div class="column">
+                <Card hamster="hamster" />
+            </div>
+        }
     </div>
 }
 
@@ -29,12 +29,5 @@ else
     protected override async Task OnInitializedAsync()
     {
         hamsters = await RequestService.GetHamsters();
-
-        var activeHamsters = from hamster in hamsters
-                             where hamster.Status == "Active"
-                             select hamster;
-
-        hamsters = activeHamsters.ToList();
-
     }
     }

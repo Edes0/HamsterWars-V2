@@ -1,4 +1,5 @@
 ﻿@page "/Leaderboard"
+@using HamsterWarsV2.Blazor.Services
 
 @inject IRequestService RequestService
 
@@ -26,7 +27,7 @@ else
                 <tr>
                     <td><a href="/HamsterWins/@hamster.Id">@hamster.Name</a></td>
                     <td>@hamster.Age</td>
-                    <td>@PercentageCalculator.Calculate(@hamster.Wins, @hamster.Games)%</td>
+                    <td>@Calculator.CalculatePercentage(@hamster.Wins, @hamster.Games)%</td>
                     <td>@hamster.Likes</td>
                 </tr>
             }
@@ -41,10 +42,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         hamsters = await RequestService.GetHamsters();
-
-        var descendingOrder = hamsters.OrderByDescending(i => PercentageCalculator.Calculate(i.Wins, i.Games));
-        hamsters = descendingOrder.ToList();
-
+        hamsters = ListOrderService.OrderHamsterByWinPercentage(hamsters);
     }
-
 }

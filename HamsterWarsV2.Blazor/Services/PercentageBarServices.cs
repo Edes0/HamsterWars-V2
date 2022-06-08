@@ -21,5 +21,30 @@ namespace HamsterWarsV2.Blazor.Services
 
             return ((int)winnerHamsterWinRate, (int)loserHamsterWinRate);
         }
+        public static int CalculateOdds(int winnerWinrate, int loserWinrate)
+        {
+
+            decimal oddsDec = (decimal)winnerWinrate / ((decimal)winnerWinrate + (decimal)loserWinrate) * 100;
+
+            return (int)oddsDec; ;
+        }
+
+        public static int CalculatePercentage(List<Hamster> hamsters, List<Battle> battles)
+        {
+            int percentage;
+
+            (Hamster winnerHamster, Hamster loserHamster) = PercentageBarServices.GetResultHamsters(hamsters, battles);
+            (int winnerWinrate, int loserWinrate) = PercentageBarServices.CalculateWinRate(winnerHamster, loserHamster);
+
+            if (winnerWinrate > loserWinrate)
+            {
+                return percentage = CalculateOdds(winnerWinrate, loserWinrate);
+            }
+            else
+            {
+                percentage = CalculateOdds(loserWinrate, winnerWinrate);
+                return percentage = 100 - percentage;
+            }
+        }
     }
 }

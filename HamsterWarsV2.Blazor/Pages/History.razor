@@ -47,6 +47,7 @@ else
         hamsters = await RequestService.GetHamsters();
 
         battles = await RequestService.GetBattles();
+        battles = ListOrderService.OrderBattleByDate(battles);
 
         StateHasChanged();
     }

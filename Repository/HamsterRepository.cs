@@ -16,6 +16,7 @@ namespace Repository
         public async Task<IEnumerable<Hamster>> GetAllHamstersAsync(HamsterParameters hamsterParameters, bool trackChanges)
         {
             var hamsters = await FindByCondition(h => h.Age >= hamsterParameters.MinAge && h.Age <= hamsterParameters.MaxAge, trackChanges)
+                .GetOnlyActive()
                 .FilterHamsters(hamsterParameters.MinAge, hamsterParameters.MaxAge)
                 .Search(hamsterParameters.SearchTerm)
                 .Sort(hamsterParameters.OrderBy)

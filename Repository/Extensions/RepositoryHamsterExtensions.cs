@@ -53,5 +53,9 @@ namespace Repository.Extensions
 
             return hamsters.OrderBy(orderQuery);
         }
+        public static IQueryable<Hamster> GetOnlyActive(this IQueryable<Hamster> hamsters)
+        {
+            return hamsters.Where(h => h.Status == "Active");
+        }
     }
 }

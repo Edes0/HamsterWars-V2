@@ -15,7 +15,11 @@ namespace Service
         {
             var hamsters = await _httpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
 
-            return hamsters;
+            var activeHamsters = from hamster in hamsters
+                                 where hamster.Status == "Active"
+                                 select hamster;
+
+            return activeHamsters.ToList();
         }
 
         public async Task<List<Battle>> GetWonBattles(Hamster hamster)
