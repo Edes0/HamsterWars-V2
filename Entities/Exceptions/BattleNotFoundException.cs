@@ -1,7 +1,12 @@
-﻿public sealed class BattleNotFoundException : NotFoundException
+﻿
+namespace Entities.Exceptions
 {
-    public BattleNotFoundException(Guid battleId)
-    : base($"The battle with id: {battleId} doesn't exist in the database.")
+
+    public sealed class BattleNotFoundException : NotFoundException
     {
+        public BattleNotFoundException(Guid battleId)
+        : base($"The battle with id: {battleId} doesn't exist in the database.")
+        {
+        }
     }
 }

@@ -92,6 +92,69 @@ namespace Service
             _mapper.Map(hamsterForUpdate, hamster);
             await _repository.SaveAsync();
         }
+
+        public async Task UpdateWinnerHamsterAsync(Guid hamsterId, HamsterForUpdateDto hamsterForUpdate, bool trackChanges)
+        {
+            var hamster = await GetHamsterAndCheckIfItExists(hamsterId, trackChanges);
+
+            hamster.Games++;
+            hamster.Wins++;
+
+            _mapper.Map(hamsterForUpdate, hamster);
+            await _repository.SaveAsync();
+        }
+
+        public async Task UpdateLoserHamsterAsync(Guid hamsterId, HamsterForUpdateDto hamsterForUpdate, bool trackChanges)
+        {
+            var hamster = await GetHamsterAndCheckIfItExists(hamsterId, trackChanges);
+
+            hamster.Games++;
+            hamster.Defeats++;
+
+            _mapper.Map(hamsterForUpdate, hamster);
+            await _repository.SaveAsync();
+        }
+
+        public async Task<HamsterDto> GetRandomHamsterAsync(HamsterParameters hamsterParameters, bool trackChanges)
+        {
+            if (!hamsterParameters.ValidAgeRange)
+                throw new MaxAgeRangeBadRequestException();
+
+            var hamsters = await _repository.Hamster.GetAllHamstersAsync(hamsterParameters, trackChanges);
+
+            Hamster hamster = Randomizer.GetRandomHamsterFromList(hamsters.ToList());
+
+            var hamsterDto = _mapper.Map<HamsterDto>(hamster);
+
+            return hamsterDto;
+        }
+
+        public async Task<IEnumerable<HamsterDto>> GetWinnerHamstersAsync(HamsterParameters hamsterParameters, bool trackChanges)
+        {
+            if (!hamsterParameters.ValidAgeRange)
+                throw new MaxAgeRangeBadRequestException();
+
+            var hamsters = await _repository.Hamster.GetAllHamstersAsync(hamsterParameters, trackChanges);
+
+            hamsters = hamsters.OrderByDescending(h => h.Wins).ThenByDescending(h => h.Name).Take(5);
+
+            var hamstersDto = _mapper.Map<IEnumerable<HamsterDto>>(hamsters);
+            return hamstersDto;
+        }
+
+        public async Task<IEnumerable<HamsterDto>> GetLoserHamstersAsync(HamsterParameters hamsterParameters, bool trackChanges)
+        {
+            if (!hamsterParameters.ValidAgeRange)
+                throw new MaxAgeRangeBadRequestException();
+
+            var hamsters = await _repository.Hamster.GetAllHamstersAsync(hamsterParameters, trackChanges);
+
+            hamsters = hamsters.OrderByDescending(h => h.Defeats).ThenByDescending(h => h.Name).Take(5);
+
+            var hamstersDto = _mapper.Map<IEnumerable<HamsterDto>>(hamsters);
+            return hamstersDto;
+        }
+
         private async Task<Hamster> GetHamsterAndCheckIfItExists(Guid id, bool trackChanges)
         {
             var hamster = await _repository.Hamster.GetHamsterAsync(id, trackChanges);

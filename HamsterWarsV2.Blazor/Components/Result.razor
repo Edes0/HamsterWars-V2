@@ -1,0 +1,49 @@
+﻿@inject HttpClient HttpClient
+
+@if (hamsters is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    if(battles.Count() != 0)
+    {
+    <div class="displayed">
+        <div class="absoluteResultLeft">
+            <h5>@winnerHamster.Name won</h5>
+            <img src="/Images/@winnerHamster.ImageName" align="bottom" style="width:300px;height:200px;">
+        </div>
+        <div class="absoluteResultRight">
+            <h5>@loserHamster.Name lost</h5>
+            <img src="/Images/@loserHamster.ImageName" align="bottom" style="width:300px;height:200px;">
+        </div>
+        <PercentageBar />
+    </div>
+    }
+}
+
+@code {
+    private List<Hamster>? hamsters;
+    private List<Battle>? battles;
+    private Hamster? winnerHamster;
+    private Hamster? loserHamster;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+
+        if (battles.Count() != 0)
+    {
+            winnerHamster = hamsters.Where(h => h.Id == battles.Last().Winner_ID).Single();
+            loserHamster = hamsters.Where(h => h.Id == battles.Last().Loser_ID).Single();
+        }
+
+        StateHasChanged();
+    }
+    /// <summary>
+    /// Shows two hamsters from the last battle.
+    /// </summary>
+}

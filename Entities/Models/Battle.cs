@@ -8,6 +8,13 @@ namespace Entities.Models
             Date = DateTime.Now;
         }
 
+        public Battle(Guid winner_Id, Guid loser_Id)
+        {
+            Winner_ID = winner_Id;
+            Loser_ID = loser_Id;    
+            Date = DateTime.Now;
+        }
+
         public Guid Id { get; set; }
 
         public Guid Winner_ID { get; set; }

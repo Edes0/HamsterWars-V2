@@ -19,6 +19,7 @@ namespace Repository
                 .FilterBattles(battleParameters.MinDate, battleParameters.MaxDate)
                 .Search(battleParameters.SearchTerm)
                 .Sort(battleParameters.OrderBy)
+                .GetWinnerBattles(battleParameters.HamsterId)
                 .ToListAsync();
 
             return PagedList<Battle>

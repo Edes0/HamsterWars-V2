@@ -1,0 +1,50 @@
+﻿@page "/Leaderboard"
+
+@inject HttpClient HttpClient
+
+<h1>Leaderboard</h1>
+
+
+@if (hamsters is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Win rate</th>
+                <th>Likes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hamster in hamsters)
+            {
+                <tr>
+                    <td><a href="/HamsterWins/@hamster.Id">@hamster.Name</a></td>
+                    <td>@hamster.Age</td>
+                    <td>@PercentageCalculator.Calculate(@hamster.Wins, @hamster.Games)%</td>
+                    <td>@hamster.Likes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Hamster>? hamsters;
+    private int count = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        var descendingOrder = hamsters.OrderByDescending(i => PercentageCalculator.Calculate(i.Wins, i.Games));
+        hamsters = descendingOrder.ToList();
+
+    }
+
+}

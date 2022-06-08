@@ -1,0 +1,42 @@
+﻿@inject HttpClient HttpClient
+
+<div class="progress my-2 percentageBar">
+    <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuemin="0" aria-valuemax="100">
+        @percentage%
+    </div>
+</div>
+
+
+@code {
+    private List<Hamster>? hamsters;
+    private List<Battle>? battles;
+    private Hamster? winnerHamster;
+    private Hamster? loserHamster;
+
+    private int? percentage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+
+        winnerHamster = hamsters.Where(h => h.Id == battles.Last().Winner_ID).Single();
+        loserHamster = hamsters.Where(h => h.Id == battles.Last().Loser_ID).Single();
+
+        int winnerWinrate = PercentageCalculator.Calculate(winnerHamster.Wins, winnerHamster.Games);
+        int loserWinrate = PercentageCalculator.Calculate(loserHamster.Wins, loserHamster.Games);
+
+        if (winnerWinrate > loserWinrate)
+        {
+            percentage = OddsCalculator.Calculate(winnerWinrate, loserWinrate);
+        }
+        else
+        {
+            percentage = OddsCalculator.Calculate(loserWinrate, winnerWinrate);
+            percentage = 100 - percentage;
+        }
+    }
+    /// <summary>
+    /// Component that shows how likley the hamster that won was. Calculates with PercentageCalculator.Calculate.
+    /// </summary>
+}

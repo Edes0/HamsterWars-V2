@@ -1,0 +1,67 @@
+﻿@page "/HamsterWins/{Id:guid}"
+
+@inject HttpClient HttpClient
+
+<h3>Battle History</h3>
+
+@if (battles is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <img src="/Images/@hamster.ImageName" alt="Avatar" style="width:600px;height:400px;">
+    <h1>Name: @hamster.Name</h1>
+    <p>Favourite Food: @hamster.FavouriteFood</p>
+    <p>Favourite Activity: @hamster.FavouriteActivity</p>
+    <p>Wins: @hamster.Wins</p>
+    <p>Defeats: @hamster.Defeats</p>
+    <p>Games: @hamster.Games</p>
+    <hr />
+
+
+    <h3>Won battles: </h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Winner</th>
+                <th>Loser</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var battle in battles)
+            {
+                <tr>
+                    <td>@battle.Date</td>
+                    <td>@hamster.Name</td>
+                    <td>@hamsters.Where(h => h.Id == battle.Loser_ID).Single().Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private Hamster? hamster;
+    private List<Battle>? battles;
+    private List<Hamster>? hamsters;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        battles = await HttpClient.GetFromJsonAsync<List<Battle>>($"/api/battles/matchWinners/{Id}");
+
+        //battles = battles.OrderByDescending(s => s.Date).Where(s => s.Winner_ID == Id).ToList();
+
+        hamster = hamsters.Where(h => h.Id == Id).Single();
+
+        StateHasChanged();
+    }
+}

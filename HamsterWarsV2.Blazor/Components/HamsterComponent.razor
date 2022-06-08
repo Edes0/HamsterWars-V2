@@ -1,0 +1,55 @@
+﻿@using Service
+@inject NavigationManager _nav
+@inject HttpClient HttpClient
+@inject IRequestService RequestService
+
+@if (hamsters is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p class="header"><h1>@hamster1.Name VS @hamster2.Name</h1></p>
+    <div class="displayed">
+        <div class="absoluteBattleLeft">
+            <h2 class="text-center">@hamster1.Name</h2>
+            <input type="image" @onclick="(() => BattleStatsUpdate(hamster1, hamster2))" src="/Images/@hamster1.ImageName" style="width:600px;height:400px;">
+        </div>
+        <div class="absoluteBattleRight">
+            <h2 class="text-center">@hamster2.Name</h2>
+            <input type="image" @onclick="(() => BattleStatsUpdate(hamster2, hamster1))" src="/Images/@hamster2.ImageName" style="width:600px;height:400px;">
+        </div>
+    </div>
+}
+
+@code {
+    private List<Hamster>? hamsters;
+    private Hamster? hamster1;
+    private Hamster? hamster2;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await RequestService.GetHamsters();
+
+        (hamster1, hamster2) = await RequestService.GetTwoRandomUniqueHamsters();
+
+        StateHasChanged();
+    }
+
+    // Updates stats for both hamsters, first paramenter winner.
+    protected async Task BattleStatsUpdate(Hamster winner, Hamster loser)
+    {
+        //Fix patch multible also, check if Guid fucks up
+        await HttpClient.PutAsJsonAsync($"/api/hamsters/updatewinner/{winner.Id}", winner);
+        await HttpClient.PutAsJsonAsync($"/api/hamsters/updateloser/{loser.Id}", loser);
+
+        //DOESNT WORK PROLLY
+        Battle battle = new Battle(winner.Id, loser.Id);
+        await HttpClient.PostAsJsonAsync<Battle>("/api/battles", battle);
+
+        _nav.NavigateTo(_nav.Uri, forceLoad: true);
+    }
+    /// <summary>
+    /// Component that shows two random hamsters for battle.
+    /// </summary>
+    }

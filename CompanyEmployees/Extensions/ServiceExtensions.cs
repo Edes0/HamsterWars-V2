@@ -16,6 +16,7 @@ namespace HamsterWarsV2API.Extensions
                    builder.AllowAnyOrigin()
                    .AllowAnyMethod()
                    .AllowAnyHeader()
+                   .AllowAnyOrigin()
                    .WithExposedHeaders("X-Pagination"));
         });
 

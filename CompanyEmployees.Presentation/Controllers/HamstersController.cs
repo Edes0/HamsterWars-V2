@@ -65,4 +65,41 @@ public class HamstersController : ControllerBase
         await _service.HamsterService.UpdateHamsterAsync(id, hamster, trackChanges: true);
         return NoContent();
     }
+
+    [HttpPut("{id:guid}", Name = "UpdateWinner")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> UpdateWinnerHamster(Guid id, [FromBody] HamsterForUpdateDto hamster)
+    {
+        await _service.HamsterService.UpdateHamsterAsync(id, hamster, trackChanges: true);
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}", Name = "UpdateLoser")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> UpdateLoserHamster(Guid id, [FromBody] HamsterForUpdateDto hamster)
+    {
+        await _service.HamsterService.UpdateHamsterAsync(id, hamster, trackChanges: true);
+        return NoContent();
+    }
+
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandomHamster([FromQuery] HamsterParameters hamsterParameters)
+    {
+        var hamster = await _service.HamsterService.GetRandomHamsterAsync(hamsterParameters, trackChanges: false);
+        return Ok(hamster);
+    }
+
+    [HttpGet("winners")]
+    public async Task<IActionResult> GetWinnerHamsters([FromQuery] HamsterParameters hamsterParameters)
+    {
+        var hamster = await _service.HamsterService.GetWinnerHamstersAsync(hamsterParameters, trackChanges: false);
+        return Ok(hamster);
+    }
+
+    [HttpGet("losers")]
+    public async Task<IActionResult> GetLoserHamsters([FromQuery] HamsterParameters hamsterParameters)
+    {
+        var hamster = await _service.HamsterService.GetWinnerHamstersAsync(hamsterParameters, trackChanges: false);
+        return Ok(hamster);
+    }
 }

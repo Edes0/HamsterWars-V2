@@ -1,0 +1,62 @@
+﻿@page "/History"
+
+@inject NavigationManager _nav
+@inject HttpClient HttpClient
+
+
+<h3>History</h3>
+
+@if (battles is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead> 
+            <tr>
+                <th>Time</th>
+                <th>Winner</th>
+                <th>Loser</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var battle in battles)
+            {
+                <tr>
+                    <td>@battle.Date</td>
+                    <td>@hamsters.Where(h => h.Id == battle.Winner_ID).Single().Name</td>
+                    <td>@hamsters.Where(h => h.Id == battle.Loser_ID).Single().Name</td>
+                    @*MAKE OWN COMPONENT*@
+                    <td><button type="button" @onclick="(() => RemoveBattle(battle))" class="btn btn-danger">REMOVE</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private List<Hamster>? hamsters;
+    private List<Battle>? battles;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+
+        //battles = battles.OrderByDescending(s => s.Date).ToList();
+
+        StateHasChanged();
+    }
+
+    private async Task RemoveBattle(Battle battle)
+    {
+        await HttpClient.DeleteAsync($"/api/battles/{battle.Id}");
+
+         _nav.NavigateTo(_nav.Uri, forceLoad: true);
+    }
+}

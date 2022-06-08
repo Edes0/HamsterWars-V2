@@ -1,0 +1,38 @@
+﻿@inject HttpClient HttpClient
+@inject NavigationManager _nav
+
+<h4>Add New Hamster</h4>
+<EditForm Context="Hamster" Model="@newHamster" OnValidSubmit="@InsertHamster">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText placeholder="Name" id="Name" @bind-Value="@newHamster.Name" />
+    <InputNumber placeholder="Age" id="Age" @bind-Value="@newHamster.Age" />
+    <InputText placeholder="Favourite food" id="FavouriteFood" @bind-Value="@newHamster.FavouriteFood" />
+    <InputText placeholder="Favourite Activiy" id="FavouriteActiviy" @bind-Value="@newHamster.FavouriteActivity" />
+    <InputText placeholder="Image Name" id="ImageName" @bind-Value="@newHamster.ImageName" />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    private List<Hamster>? hamsters;
+    private Hamster? newHamster = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+    }
+
+    private async Task InsertHamster()
+    {
+        await HttpClient.PostAsJsonAsync("/api/hamsters", newHamster);
+
+        _nav.NavigateTo(_nav.Uri, forceLoad: true);
+    }
+    /// <summary>
+    /// Form to create a Hamster
+    /// Favourite food and activity is nullable.
+    /// </summary>
+    }
+

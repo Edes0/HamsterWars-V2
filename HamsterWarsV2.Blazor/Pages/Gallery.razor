@@ -1,0 +1,40 @@
+﻿@page "/Gallery"
+
+@inject HttpClient HttpClient
+
+
+<AddHamster />
+
+<h4>Our Hamsters</h4>
+
+@if (hamsters is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+    @foreach (Hamster hamster in hamsters)
+    {
+        <div class="column">
+        <Card hamster="hamster"/>
+        </div>
+    }
+    </div>
+}
+
+@code {
+    private List<Hamster> hamsters;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        var activeHamsters = from hamster in hamsters
+                             where hamster.Status == "Active"
+                             select hamster;
+
+        hamsters = activeHamsters.ToList();
+
+    }
+    }

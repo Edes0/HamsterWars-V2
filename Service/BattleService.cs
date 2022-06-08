@@ -92,6 +92,7 @@ namespace Service
             _mapper.Map(battleForUpdate, battle);
             await _repository.SaveAsync();
         }
+
         private async Task<Battle> GetBattleAndCheckIfItExists(Guid id, bool trackChanges)
         {
             var battle = await _repository.Battle.GetBattleAsync(id, trackChanges);
@@ -100,6 +101,21 @@ namespace Service
                 throw new BattleNotFoundException(id);
 
             return battle;
+        }
+
+        public async Task<IEnumerable<BattleDto>> GetMatchWinnersAsync(Guid hamsterId, BattleParameters battleParameters, bool trackChanges)
+        {
+            if (!battleParameters.ValidDateRange)
+                throw new MaxDateRangeBadRequestException();
+
+            battleParameters.HamsterId = hamsterId.ToString();
+            var battles = await _repository.Battle.GetAllBattlesAsync(battleParameters, trackChanges);
+
+            if (battles is null)
+                throw new BattlesForHamsterNotFoundException(hamsterId);
+
+            var battlesDto = _mapper.Map<IEnumerable<BattleDto>>(battles);
+            return battlesDto;
         }
     }
 }

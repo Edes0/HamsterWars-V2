@@ -1,0 +1,71 @@
+﻿@page "/Statistics"
+
+@inject HttpClient HttpClient
+
+<h3>Statistics</h3>
+
+
+<h1>Leaderboard</h1>
+
+
+@if (hamsters is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h4>Top 5 Winners</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @foreach (var hamster in hamsterWinners)
+                    {
+                        <Card hamster="hamster" />
+                    }
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <h4>Top 5 Losers</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @foreach (var hamster in hamsterLosers)
+                    {
+                        <Card hamster="hamster" />
+                    }
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Hamster> hamsters;
+    private List<Hamster> hamsterWinners;
+    private List<Hamster> hamsterLosers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+
+        hamsterWinners = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters/winners");
+        hamsterLosers = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters/losers");
+    }
+
+}

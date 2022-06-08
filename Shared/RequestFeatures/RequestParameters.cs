@@ -4,7 +4,9 @@
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;
-        private int _pageSize = 10;
+
+        //If you want paging, change from MaxValue
+        private int _pageSize = int.MaxValue;
         public int PageSize
         {
             get

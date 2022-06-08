@@ -17,6 +17,7 @@ public class BattlesController : ControllerBase
     public async Task<IActionResult> GetBattles([FromQuery] BattleParameters battleParameters)
     {
         var battles = await _service.BattleService.GetAllBattlesAsync(battleParameters, trackChanges: false);
+
         return Ok(battles);
     }
 
@@ -64,5 +65,13 @@ public class BattlesController : ControllerBase
     {
         await _service.BattleService.UpdateBattleAsync(id, battle, trackChanges: true);
         return NoContent();
+    }
+
+    [HttpGet("matchWinners/{id:guid}")]
+    public async Task<IActionResult> GetMatchWinner(Guid id, [FromQuery] BattleParameters battleParameters)
+    {
+        var matchWinners = await _service.BattleService.GetMatchWinnersAsync(id, battleParameters, trackChanges: false);
+
+        return Ok(matchWinners);
     }
 }

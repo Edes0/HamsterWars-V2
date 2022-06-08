@@ -1,0 +1,35 @@
+﻿@inject HttpClient HttpClient
+@inject NavigationManager _nav
+
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="/Images/@hamster.ImageName" alt="Avatar" style="width:300px;height:300px;">
+    </div>
+    <div class="flip-card-back">
+      <h1>Name: <a href="/HamsterWins/@hamster.Id">@hamster.Name</a></h1>
+      <p>Favourite Food: @hamster.FavouriteFood</p>
+      <p>Favourite Activity: @hamster.FavouriteActivity</p>
+      <p>Wins: @hamster.Wins</p>
+      <p>Defeats: @hamster.Defeats</p>
+      <p>Games: @hamster.Games</p>
+      <button type="button" @onclick="(() => RemoveHamster(hamster))" class="btn btn-danger">REMOVE</button>
+    </div>
+  </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public Hamster? hamster { get; set; }
+
+    private async Task RemoveHamster(Hamster hamster)
+    {
+        await HttpClient.DeleteAsync($"/api/hamsters/{hamster.Id}");
+
+        _nav.NavigateTo(_nav.Uri, forceLoad: true);
+    }
+    /// <summary>
+    /// Flippable card for Hamster
+    /// </summary>
+}

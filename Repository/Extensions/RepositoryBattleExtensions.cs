@@ -51,5 +51,12 @@ namespace Repository.Extensions
 
             return battles.OrderBy(orderQuery);
         }
+        public static IQueryable<Battle> GetWinnerBattles(this IQueryable<Battle> battles, string Id)
+        {
+            if (string.IsNullOrWhiteSpace(Id))
+                return battles;
+
+            return battles.Where(e => e.Winner_ID == Guid.Parse(Id));
+        }
     }
 }

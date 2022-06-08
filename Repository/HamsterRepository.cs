@@ -37,4 +37,6 @@ namespace Repository
 
         public void DeleteHamster(Hamster hamster) => Delete(hamster);
     }
+
+
 }

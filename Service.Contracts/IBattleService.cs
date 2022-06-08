@@ -12,7 +12,7 @@ namespace Service.Contracts
         trackChanges);
         Task<(IEnumerable<BattleDto> battles, string ids)> CreateBattleCollectionAsync(IEnumerable<BattleForCreationDto> battleCollection);
         Task DeleteBattleAsync(Guid battleId, bool trackChanges);
-        Task UpdateBattleAsync(Guid battleId, BattleForUpdateDto battleForUpdate,
-        bool trackChanges);
+        Task UpdateBattleAsync(Guid battleId, BattleForUpdateDto battleForUpdate, bool trackChanges);
+        Task<IEnumerable<BattleDto>> GetMatchWinnersAsync(Guid battleId, BattleParameters battleParameters, bool trackChanges);
     }
 }
