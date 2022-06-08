@@ -1,4 +1,5 @@
-﻿@inject HttpClient HttpClient
+﻿@using HamsterWarsV2.Blazor.Services
+@inject IRequestService RequestService
 
 <div class="progress my-2 percentageBar">
     <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuemin="0" aria-valuemax="100">
@@ -17,14 +18,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
-        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+        hamsters = await RequestService.GetHamsters();
+        battles = await RequestService.GetBattles();
 
-        winnerHamster = hamsters.Where(h => h.Id == battles.Last().Winner_ID).Single();
-        loserHamster = hamsters.Where(h => h.Id == battles.Last().Loser_ID).Single();
-
-        int winnerWinrate = PercentageCalculator.Calculate(winnerHamster.Wins, winnerHamster.Games);
-        int loserWinrate = PercentageCalculator.Calculate(loserHamster.Wins, loserHamster.Games);
+        (winnerHamster, loserHamster) = PercentageBarServices.GetResultHamsters(hamsters, battles);
+        (int winnerWinrate, int loserWinrate) = PercentageBarServices.CalculateWinRate(winnerHamster, loserHamster);
 
         if (winnerWinrate > loserWinrate)
         {

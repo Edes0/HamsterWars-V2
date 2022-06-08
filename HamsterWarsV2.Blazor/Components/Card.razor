@@ -1,4 +1,4 @@
-﻿@inject HttpClient HttpClient
+﻿@inject IRequestService RequestService
 @inject NavigationManager _nav
 
 <div class="flip-card">
@@ -25,7 +25,7 @@
 
     private async Task RemoveHamster(Hamster hamster)
     {
-        await HttpClient.DeleteAsync($"/api/hamsters/{hamster.Id}");
+        await RequestService.DeleteHamster(hamster);
 
         _nav.NavigateTo(_nav.Uri, forceLoad: true);
     }

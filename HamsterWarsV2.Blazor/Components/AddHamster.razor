@@ -1,4 +1,4 @@
-﻿@inject HttpClient HttpClient
+﻿@inject IRequestService RequestService
 @inject NavigationManager _nav
 
 <h4>Add New Hamster</h4>
@@ -21,12 +21,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+        hamsters = await RequestService.GetHamsters();
     }
 
     private async Task InsertHamster()
     {
-        await HttpClient.PostAsJsonAsync("/api/hamsters", newHamster);
+        await RequestService.PostHamster(newHamster);
 
         _nav.NavigateTo(_nav.Uri, forceLoad: true);
     }

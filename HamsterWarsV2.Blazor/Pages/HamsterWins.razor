@@ -1,6 +1,7 @@
 ﻿@page "/HamsterWins/{Id:guid}"
+@using HamsterWarsV2.Blazor.Services
 
-@inject HttpClient HttpClient
+@inject IRequestService RequestService
 
 <h3>Battle History</h3>
 
@@ -35,7 +36,7 @@ else
                 <tr>
                     <td>@battle.Date</td>
                     <td>@hamster.Name</td>
-                    <td>@hamsters.Where(h => h.Id == battle.Loser_ID).Single().Name</td>
+                    <td>@RemovedHamsterHelperClass.CheckIfHamsterExists(hamsters, battle.Loser_ID).Name</td>
                 </tr>
             }
         </tbody>
@@ -54,13 +55,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
-
-        battles = await HttpClient.GetFromJsonAsync<List<Battle>>($"/api/battles/matchWinners/{Id}");
-
-        //battles = battles.OrderByDescending(s => s.Date).Where(s => s.Winner_ID == Id).ToList();
+        hamsters = await RequestService.GetHamsters();
 
         hamster = hamsters.Where(h => h.Id == Id).Single();
+
+        battles = await RequestService.GetWonBattles(hamster);
 
         StateHasChanged();
     }

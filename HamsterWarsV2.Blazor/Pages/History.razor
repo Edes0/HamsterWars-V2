@@ -1,7 +1,8 @@
 ﻿@page "/History"
+@using HamsterWarsV2.Blazor.Services
 
 @inject NavigationManager _nav
-@inject HttpClient HttpClient
+@inject IRequestService RequestService
 
 
 <h3>History</h3>
@@ -13,7 +14,7 @@
 else
 {
     <table class="table table-striped">
-        <thead> 
+        <thead>
             <tr>
                 <th>Time</th>
                 <th>Winner</th>
@@ -26,8 +27,8 @@ else
             {
                 <tr>
                     <td>@battle.Date</td>
-                    <td>@hamsters.Where(h => h.Id == battle.Winner_ID).Single().Name</td>
-                    <td>@hamsters.Where(h => h.Id == battle.Loser_ID).Single().Name</td>
+                    <td>@RemovedHamsterHelperClass.CheckIfHamsterExists(hamsters, battle.Winner_ID).Name</td>
+                    <td>@RemovedHamsterHelperClass.CheckIfHamsterExists(hamsters, battle.Loser_ID).Name</td>
                     @*MAKE OWN COMPONENT*@
                     <td><button type="button" @onclick="(() => RemoveBattle(battle))" class="btn btn-danger">REMOVE</button></td>
                 </tr>
@@ -41,22 +42,19 @@ else
     private List<Hamster>? hamsters;
     private List<Battle>? battles;
 
-
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+        hamsters = await RequestService.GetHamsters();
 
-        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
-
-        //battles = battles.OrderByDescending(s => s.Date).ToList();
+        battles = await RequestService.GetBattles();
 
         StateHasChanged();
     }
 
     private async Task RemoveBattle(Battle battle)
     {
-        await HttpClient.DeleteAsync($"/api/battles/{battle.Id}");
+        await RequestService.DeleteBattle(battle);
 
-         _nav.NavigateTo(_nav.Uri, forceLoad: true);
+        _nav.NavigateTo(_nav.Uri, forceLoad: true);
     }
 }

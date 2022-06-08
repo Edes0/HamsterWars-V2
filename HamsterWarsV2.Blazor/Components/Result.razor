@@ -1,4 +1,5 @@
-﻿@inject HttpClient HttpClient
+﻿@using HamsterWarsV2.Blazor.Services
+@inject IRequestService RequestService
 
 @if (hamsters is null)
 {
@@ -31,14 +32,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+        hamsters = await RequestService.GetHamsters();
 
-        battles = await HttpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+        battles = await RequestService.GetBattles();
 
         if (battles.Count() != 0)
-    {
-            winnerHamster = hamsters.Where(h => h.Id == battles.Last().Winner_ID).Single();
-            loserHamster = hamsters.Where(h => h.Id == battles.Last().Loser_ID).Single();
+        {
+            winnerHamster = RemovedHamsterHelperClass.ReturnLastBattleWinner(hamsters, battles);
+            loserHamster = RemovedHamsterHelperClass.ReturnLastBattleLoser(hamsters, battles);
         }
 
         StateHasChanged();

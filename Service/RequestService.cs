@@ -18,22 +18,71 @@ namespace Service
             return hamsters;
         }
 
+        public async Task<List<Battle>> GetWonBattles(Hamster hamster)
+        {
+            var battles = await _httpClient.GetFromJsonAsync<List<Battle>>($"/api/battles/matchWinners/{hamster.Id}");
+
+            return battles;
+        }
+
+        public async Task<List<Hamster>> GetWinnerHamsters()
+        {
+            var hamsters = await _httpClient.GetFromJsonAsync<List<Hamster>>($"/api/hamsters/winners");
+
+            return hamsters;
+        }
+
+        public async Task<List<Hamster>> GetLoserHamsters()
+        {
+            var hamsters = await _httpClient.GetFromJsonAsync<List<Hamster>>($"/api/hamsters/losers");
+
+            return hamsters;
+        }
+
+        public async Task DeleteBattle(Battle battle)
+        {
+            await _httpClient.DeleteAsync($"/api/battles/{battle.Id}");
+        }
+        
+
+        public async Task DeleteHamster(Hamster hamster)
+        {
+            await _httpClient.DeleteAsync($"/api/hamsters/{hamster.Id}");
+        }
+
+        public async Task<List<Battle>> GetBattles()
+        {
+            var battles = await _httpClient.GetFromJsonAsync<List<Battle>>("/api/battles");
+
+            return battles;
+        }
+
         public async Task PostBattle(Hamster winner, Hamster loser)
         {
             Battle battle = new Battle(winner.Id, loser.Id);
 
             await _httpClient.PostAsJsonAsync<Battle>("/api/battles", battle);
+        }
 
+        public async Task PostHamster(Hamster newHamster)
+        {
+            await _httpClient.PostAsJsonAsync("/api/hamsters", newHamster);
         }
 
         public async Task UpdateWinner(Hamster winner)
         {
-            await _httpClient.PutAsJsonAsync($"/api/hamsters/updatewinner/{winner.Id}", winner);
+            winner.Games++;
+            winner.Wins++;
+
+            await _httpClient.PutAsJsonAsync($"/api/hamsters/{winner.Id}", winner);
         }
 
         public async Task UpdateLoser(Hamster loser)
         {
-            await _httpClient.PutAsJsonAsync($"/api/hamsters/updateloser/{loser.Id}", loser);
+            loser.Games++;
+            loser.Wins++;
+
+            await _httpClient.PutAsJsonAsync($"/api/hamsters/{loser.Id}", loser);
         }
 
         public async Task<Hamster> GetRandomHamster()

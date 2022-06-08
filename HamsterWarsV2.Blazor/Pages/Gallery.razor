@@ -1,6 +1,6 @@
 ﻿@page "/Gallery"
 
-@inject HttpClient HttpClient
+@inject IRequestService RequestService
 
 
 <AddHamster />
@@ -28,7 +28,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await HttpClient.GetFromJsonAsync<List<Hamster>>("/api/hamsters");
+        hamsters = await RequestService.GetHamsters();
 
         var activeHamsters = from hamster in hamsters
                              where hamster.Status == "Active"

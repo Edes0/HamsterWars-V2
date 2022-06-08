@@ -1,4 +1,5 @@
-﻿using Shared.DataTransferObjects;
+﻿using Entities.Models;
+using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 
 namespace Service.Contracts
@@ -13,9 +14,8 @@ namespace Service.Contracts
         Task<(IEnumerable<HamsterDto> hamsters, string ids)> CreateHamsterCollectionAsync(IEnumerable<HamsterForCreationDto> hamsterCollection);
         Task DeleteHamsterAsync(Guid hamsterId, bool trackChanges);
         Task UpdateHamsterAsync(Guid hamsterid, HamsterForUpdateDto hamsterForUpdate, bool trackChanges);
-        Task UpdateWinnerHamsterAsync(Guid hamsterid, HamsterForUpdateDto hamsterForUpdate, bool trackChanges);
-        Task UpdateLoserHamsterAsync(Guid hamsterid, HamsterForUpdateDto hamsterForUpdate, bool trackChanges);
         Task<HamsterDto> GetRandomHamsterAsync(HamsterParameters hamsterParameters, bool trackChanges);
         Task<IEnumerable<HamsterDto>> GetWinnerHamstersAsync(HamsterParameters hamsterParameters, bool trackChanges);
+        Task<IEnumerable<HamsterDto>> GetLoserHamstersAsync(HamsterParameters hamsterParameters, bool trackChanges);
     }
 }

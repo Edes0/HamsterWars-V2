@@ -90,28 +90,7 @@ namespace Service
             var hamster = await GetHamsterAndCheckIfItExists(hamsterId, trackChanges);
 
             _mapper.Map(hamsterForUpdate, hamster);
-            await _repository.SaveAsync();
-        }
 
-        public async Task UpdateWinnerHamsterAsync(Guid hamsterId, HamsterForUpdateDto hamsterForUpdate, bool trackChanges)
-        {
-            var hamster = await GetHamsterAndCheckIfItExists(hamsterId, trackChanges);
-
-            hamster.Games++;
-            hamster.Wins++;
-
-            _mapper.Map(hamsterForUpdate, hamster);
-            await _repository.SaveAsync();
-        }
-
-        public async Task UpdateLoserHamsterAsync(Guid hamsterId, HamsterForUpdateDto hamsterForUpdate, bool trackChanges)
-        {
-            var hamster = await GetHamsterAndCheckIfItExists(hamsterId, trackChanges);
-
-            hamster.Games++;
-            hamster.Defeats++;
-
-            _mapper.Map(hamsterForUpdate, hamster);
             await _repository.SaveAsync();
         }
 

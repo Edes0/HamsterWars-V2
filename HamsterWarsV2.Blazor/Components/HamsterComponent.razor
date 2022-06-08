@@ -1,6 +1,5 @@
 ﻿@using Service
 @inject NavigationManager _nav
-@inject HttpClient HttpClient
 @inject IRequestService RequestService
 
 @if (hamsters is null)
@@ -39,13 +38,9 @@ else
     // Updates stats for both hamsters, first paramenter winner.
     protected async Task BattleStatsUpdate(Hamster winner, Hamster loser)
     {
-        //Fix patch multible also, check if Guid fucks up
-        await HttpClient.PutAsJsonAsync($"/api/hamsters/updatewinner/{winner.Id}", winner);
-        await HttpClient.PutAsJsonAsync($"/api/hamsters/updateloser/{loser.Id}", loser);
-
-        //DOESNT WORK PROLLY
-        Battle battle = new Battle(winner.Id, loser.Id);
-        await HttpClient.PostAsJsonAsync<Battle>("/api/battles", battle);
+        await RequestService.UpdateWinner(winner);
+        await RequestService.UpdateLoser(loser);
+        await RequestService.PostBattle(winner, loser);
 
         _nav.NavigateTo(_nav.Uri, forceLoad: true);
     }
