@@ -29,7 +29,6 @@ else
                     <td>@battle.Date</td>
                     <td>@RemovedHamsterHelperClass.CheckIfHamsterExists(hamsters, battle.Winner_ID).Name</td>
                     <td>@RemovedHamsterHelperClass.CheckIfHamsterExists(hamsters, battle.Loser_ID).Name</td>
-                    @*MAKE OWN COMPONENT*@
                     <td><button type="button" @onclick="(() => RemoveBattle(battle))" class="btn btn-danger">REMOVE</button></td>
                 </tr>
             }

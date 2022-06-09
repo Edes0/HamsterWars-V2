@@ -2,7 +2,7 @@
 @inject NavigationManager _nav
 @inject IRequestService RequestService
 
-@if (hamsters is null)
+@if (hamster1 is null || hamster2 is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -22,14 +22,11 @@ else
 }
 
 @code {
-    private List<Hamster>? hamsters;
     private Hamster? hamster1;
     private Hamster? hamster2;
 
     protected override async Task OnInitializedAsync()
     {
-        hamsters = await RequestService.GetHamsters();
-
         (hamster1, hamster2) = await RequestService.GetTwoRandomUniqueHamsters();
 
         StateHasChanged();

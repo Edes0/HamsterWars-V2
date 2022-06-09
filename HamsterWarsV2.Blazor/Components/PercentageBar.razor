@@ -11,8 +11,6 @@
 @code {
     private List<Hamster>? hamsters;
     private List<Battle>? battles;
-    private Hamster? winnerHamster;
-    private Hamster? loserHamster;
 
     private int? percentage;
 
@@ -21,7 +19,7 @@
         hamsters = await RequestService.GetHamsters();
         battles = await RequestService.GetBattles();
 
-        PercentageBarServices.CalculatePercentage(hamsters, battles);
+        percentage = PercentageBarServices.CalculatePercentage(hamsters, battles);
     }
     /// <summary>
     /// Component that shows how likley the hamster that won was. Calculates with PercentageCalculator.Calculate.
